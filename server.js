@@ -6,8 +6,10 @@
 
 //Dependencies
 var express = require("express");
-
 var bodyParser = require("body-parser");
+
+//require request and cheerio, this makes scraping possible
+var request = require("request");
 var cheerio = require("cheerio");
 //where all dependencies referenced somehow?
 
@@ -73,6 +75,37 @@ app.get("/", function(req, res) {
       }
     });
   });
+
+
+    // 2. At the "/all" path, display every entry in the articles collection
+    app.get("/scrape", function(req, res) {
+     
+      request("https:/news.ycombinator.com/", function(error, response, html){
+        var $ = cheerio.load(html);
+
+        $(".title").each(function(i, element){
+          var title = $(this).children("a").text();
+          var url = $(this).children("a").attr("href");
+
+          if (title && url) {
+            db.articles.save({
+              title: title,
+              url:url
+            },
+            function(error, saved) {
+              if (error) {
+                console.log(error);
+              }
+              else {
+                console.log(saved);
+              }
+            });
+          }
+        });
+      });
+
+      res.send("Scrape complete");
+    });
   
   // 3. At the "/article" path, display every entry in the articles collection, sorted by article
   app.get("/article", function(req, res) {
