@@ -1,3 +1,9 @@
+/* Mongoose News Scraper Site 
+* Back-end
+* ==================== */
+
+//run this server file with node/nodemon
+
 //Dependencies
 var express = require("express");
 
@@ -14,10 +20,11 @@ mongoose.connect('mongodb://localhost/test');
 //Initialize Express
 var app = express();
 
-//Set up a static public folder for our web app
+//Set us a static folder (public) for our web app, looks inside public folder for index and display anything found there at the root
 app.use(express.static("public"));
 
-// //Database configuration
+
+// //Database configuration for mongo -WILL WE USE SOMETHING ELSE FOR MONGOOSE?
 // //Save the URL of database and name of collection
 // var databaseUrl = "news"; //instead of zoo
 // var collections = ["articles"] // instead of animals
@@ -52,10 +59,10 @@ app.get("/", function(req, res) {
     res.send("Hello world");
   });
   
-  // 2. At the "/all" path, display every entry in the animals collection
+  // 2. At the "/all" path, display every entry in the articles collection
   app.get("/all", function(req, res) {
     // Query: In our database, go to the animals collection, then "find" everything
-    db.animals.find({}, function(error, found) {
+    db.articles.find({}, function(error, found) {
       // Log any errors if the server encounters one
       if (error) {
         console.log(error);
@@ -67,11 +74,11 @@ app.get("/", function(req, res) {
     });
   });
   
-  // 3. At the "/name" path, display every entry in the animals collection, sorted by name
-  app.get("/name", function(req, res) {
+  // 3. At the "/article" path, display every entry in the articles collection, sorted by article
+  app.get("/article", function(req, res) {
     // Query: In our database, go to the animals collection, then "find" everything,
     // but this time, sort it by name (1 means ascending order)
-    db.animals.find().sort({ name: 1 }, function(error, found) {
+    db.articles.find().sort({ article: 1 }, function(error, found) {
       // Log any errors if the server encounters one
       if (error) {
         console.log(error);
@@ -84,10 +91,10 @@ app.get("/", function(req, res) {
   });
   
   // 4. At the "/weight" path, display every entry in the animals collection, sorted by weight
-  app.get("/weight", function(req, res) {
+  app.get("/summary", function(req, res) {
     // Query: In our database, go to the animals collection, then "find" everything,
     // but this time, sort it by weight (-1 means descending order)
-    db.animals.find().sort({ weight: -1 }, function(error, found) {
+    db.articles.find().sort({ summary: -1 }, function(error, found) {
       // Log any errors if the server encounters one
       if (error) {
         console.log(error);
