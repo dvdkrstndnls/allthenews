@@ -20,6 +20,8 @@ var mongoose = require("mongoose");
 var Promise = require("bluebird");
 mongoose.Promise = Promise;
 
+
+
 //Initialize Express
 var app = express();
 
@@ -37,14 +39,15 @@ app.use(express.static("public"));
 //Database configuration with mongoose
 mongoose.connect("mongodb://localhost/news");
 //We have a pending connection to the test database running on localhost. We now need to get notified if we connect successfully or if a connection error occurs:
-var db = mongoose.connection;
+// var db = mongoose.connection;
+var db = require('./models');
 
-//show any mongoose errors
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function() {
-  // we're connected!
-  console.log("mongoose is connected");
-});
+// //show any mongoose errors
+// db.on("error", console.error.bind(console, "connection error:"));
+// db.once("open", function() {
+//   // we're connected!
+//   console.log("mongoose is connected");
+// });
 
 // Routes Needed = 1. home (aka index) DONE  until handlebars, saved articles, scrape new article,
 //save article, delete from saved,
@@ -60,7 +63,7 @@ app.get("/", function(req, res) {
 // 2. At the "/all" path, display every entry in the articles collection
 app.get("/all", function(req, res) {
   // Query: In our database, go to the animals collection, then "find" everything
-  db.articles.find({}, function(error, found) {
+  db.headline.find({}, function(error, found) {
     // Log any errors if the server encounters one
     if (error) {
       console.log(error);
@@ -74,8 +77,8 @@ app.get("/all", function(req, res) {
 
 // 2. At the "/all" path, display every entry in the articles collection
 app.get("/scrape", function(req, res) {
-  request("https:/news.ycombinator.com/", function(error, response, html) {
-    
+  request("https://news.ycombinator.com/", function(error, response, html) {
+    console.log(html);
     var $ = cheerio.load(html);
 
     $(".title").each(function(i, element) {
@@ -88,7 +91,7 @@ app.get("/scrape", function(req, res) {
       // var summary = $(this).children("p.summary").text(); //scraping this line is optional
 
       if (title && url) {
-        db.articles.insert(
+        db.headline.insert(
           ///save instead of insert?
           {
             title: title,

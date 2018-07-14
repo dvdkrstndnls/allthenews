@@ -6,33 +6,33 @@ var Schema = mongoose.Schema; //constructor we imported from mongoose package
 
 // what we built with above constructor
 var headlineSchema = new Schema({
-    // firstName:  a trimmed, required string
+    // title:  a trimmed, required string
     title: {
         type: String,
         trim: true,
         required: true
     },
-    // firstName:  a trimmed, required string
+    // summary:  a trimmed, non-required string
     summary: {
         type: String,
         trim: true,
         required: false
     },
 
-    // firstName:  a trimmed, required string
+    // url:  a trimmed, required string
     url: {
         type: String,
         trim: true,
         required: true
     },
 
-    // firstName:  a trimmed, required string
+    // date: 
     date: {
         type: Date,
         default: Date.now,
     },
 
-    // firstName:  a trimmed, required string
+    // saved:  a boolean
     saved: {
         type: Boolean,
         default: false,
